@@ -5,7 +5,7 @@
 # > rake -T
 # 
 ##########################################################
-BASE_NAME = "gbeam"
+BASE_NAME = "sample"
 JS_CONCAT_FILE    = BASE_NAME + ".debug.js" 
 JS_MIN_FILE       = BASE_NAME + ".js"
 CSS_CONCAT_FILES  = [BASE_NAME + "@2x.debug.css", BASE_NAME + ".debug.css"]
@@ -21,7 +21,7 @@ DIST_DIR      = File.join(BASE_DIR, "/dist")
 TEST_DIR      = File.join(BASE_DIR, "/test")
 ESCAPE_SCRIPT = File.join(BASE_DIR, "/build/escapeUTF16.js")
 CHECK_SCRIPT  = File.join(BASE_DIR, "/build/check.js")
-CONCAT_SCRIPT = File.join(BASE_DIR, "/build/concat.js --root " + SRC_DIR + " --template all.js")
+CONCAT_SCRIPT = File.join(BASE_DIR, "/build/concat.js")
 CLEAN_CSS_LIB = File.join(BASE_DIR, "/build/node_modules/clean-css/bin/cleancss")
 MINIFY_LIB    = File.join(BASE_DIR, "/build/node_modules/uglify-js/bin/uglifyjs --ascii")
 
@@ -53,6 +53,9 @@ task :setup_workspace do
   puts 'Setup workspace and checkout modules'
   puts '------------------------'
 
+  sh "gem install jasmine"
+  sh "gem install jasmine:ci"
+  sh "gem install selenium-webdriver"
   sh "git submodule init"
   sh "git submodule update"
 
@@ -83,17 +86,22 @@ task :default => [:escape_utf16, DIST_DIR]  do
   puts '------------------------'
 
   # Concat all js files
-  file_name = File.join(DIST_DIR, JS_CONCAT_FILE)
-  sh "#{CONCAT_SCRIPT} > #{file_name}"
-  puts 'Created ' + file_name
+  js_file_name = File.join(DIST_DIR, JS_CONCAT_FILE)
+  sh "#{CONCAT_SCRIPT} --root #{SRC_DIR} --template all.js > #{js_file_name}"
+  puts 'Created ' + js_file_name
 
-  # Concat all css files (if needed)
-  #
-  #Dir.chdir(DIST_DIR) do
-  #  sh "sed s/@2x//g #{CSS_CONCAT_FILES[0]} > #{CSS_CONCAT_FILES[1]}"
-  #end
-  #puts 'Created ' + File.join(DIST_DIR, CSS_CONCAT_FILES[0])
-  #puts 'Created ' + File.join(DIST_DIR, CSS_CONCAT_FILES[1])
+  # Concat all css files
+  css_file_name = File.join(DIST_DIR, CSS_CONCAT_FILES[0])
+  sh "#{CONCAT_SCRIPT} --root #{CSS_DIR} --template all.css > #{css_file_name}"
+
+  Dir.chdir(DIST_DIR) do
+    sh "sed s/@2x//g #{CSS_CONCAT_FILES[0]} > #{CSS_CONCAT_FILES[1]}"
+  end
+
+  # for iPhone4
+  puts 'Created ' + File.join(DIST_DIR, CSS_CONCAT_FILES[0])
+  # for iPhone3G
+  puts 'Created ' + File.join(DIST_DIR, CSS_CONCAT_FILES[1])
 end
 
 desc "Check concat JavaScript file by jshint"
@@ -108,14 +116,21 @@ end
 desc "Minify JavaScript file"
 task :minify => :check do
   puts '------------------------'
-  puts 'Minify js file'
+  puts 'Minify js and css file'
   puts '------------------------'
-  in_file = File.join(DIST_DIR, JS_CONCAT_FILE)
-  out_file = File.join(DIST_DIR, JS_MIN_FILE)
-  sh "#{MINIFY_LIB} #{in_file} > #{out_file}"
 
-  # Minify CSS (if needed)
-  # 
+  Dir.chdir(DIST_DIR) do
+    in_js = File.join(DIST_DIR, JS_CONCAT_FILE)
+    out_js = File.join(DIST_DIR, JS_MIN_FILE)
+    sh "#{MINIFY_LIB} #{in_js} > #{out_js}"
+
+    in_css = File.join(DIST_DIR, CSS_CONCAT_FILES[0])
+    out_css = File.join(DIST_DIR, CSS_MIN_FILES[0])
+    sh "#{CLEAN_CSS_LIB} #{in_css} > #{out_css}"
+
+    sh "sed s/@2x//g #{CSS_MIN_FILES[0]} > #{CSS_MIN_FILES[1]}"
+  end
+
 end
 
 desc "Deploy files for debug"
@@ -124,6 +139,8 @@ task :debug => :concat do
   puts 'Deploy debug files'
   puts '------------------------'
 
+  # Implement me
+
 end
 
 desc "Deploy files for release"
@@ -131,6 +148,9 @@ task :release => :minify do
   puts '------------------------'
   puts 'Deploy release files'
   puts '------------------------'
+
+  # Implement me
+  
 end
 
 desc "Run unit tests"
@@ -147,7 +167,7 @@ task :citest => :minify do
 
 end
 
-desc "Start test server"
+desc "Start test server (localhost:8888)"
 task :testserver do
   Dir.chdir(TEST_DIR) do
     Rake::Task["jasmine"].invoke
