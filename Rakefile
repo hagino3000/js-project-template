@@ -123,6 +123,7 @@ task :debug => :concat do
   puts '------------------------'
   puts 'Deploy debug files'
   puts '------------------------'
+
 end
 
 desc "Deploy files for release"
