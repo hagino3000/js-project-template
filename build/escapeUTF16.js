@@ -55,13 +55,12 @@ function escapeUtf16(str) {
 }
 
 function output(escaped) {
-  var out;
   if (options.target) {
-    out = fs.createWriteStream(options.target, { flags: 'w', encoding: 'utf-8', mode: 0644 });
+    var out = fs.createWriteStream(options.target, { flags: 'w', encoding: 'utf-8', mode: 0644 });
+    out.write(escaped);
+    out.end();
   } else {
-    out = process.stdout;
+    process.stdout.write(escaped);
   }
   
-  out.write(escaped);
-  out.end();
 };

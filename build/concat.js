@@ -24,18 +24,17 @@ mu.compileAndRender(templateFile, {})
     buffer += data.toString();
   })
   .on('end', function (data) {
-    var out;
     if (targetPath) {
-      out = fs.createWriteStream(targetPath, { 
+      var out = fs.createWriteStream(targetPath, { 
           flags: 'w', 
           encoding: 'utf-8', 
           mode: 0644 
       });
+      out.write(buffer);
+      out.end;
     } else {
-      out = process.stdout;
+      process.stdout.write(buffer);
     }
-    out.write(buffer);
-    out.end();
   });
 
 

@@ -16,8 +16,8 @@ if (argv._[0]) {
 } else {
   var stdin = process.openStdin();
   stdin.setEncoding('utf-8');
-  stdin.on('data', function(chunk) { src += chunk; });
-  stdin.on('end', function() { check(src); });
+  stdin.on('data', function(chunk) {src += chunk;});
+  stdin.on('end', function() {check(src);});
 }
 
 function check(text) {

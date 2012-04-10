@@ -53,9 +53,6 @@ task :setup_workspace do
   puts 'Setup workspace and checkout modules'
   puts '------------------------'
 
-  sh "gem install jasmine"
-  sh "gem install jasmine:ci"
-  sh "gem install selenium-webdriver"
   sh "git submodule init"
   sh "git submodule update"
 
