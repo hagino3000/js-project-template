@@ -7,7 +7,7 @@ Structure for coding JavaScript and CSS, with common tasks (concat, minify, chec
 * Node.js
 * ruby
 
-And some gems. Setup next commands.
+And some ruby gems. Setup next commands.
 
     gem install rake
     gem install jasmine
@@ -19,3 +19,10 @@ And some gems. Setup next commands.
 First you must run next command
 
     rake setup_workspace
+
+# Tasks
+
+You can check build tasks by
+
+    rake -T
+
