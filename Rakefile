@@ -131,7 +131,7 @@ task :minify => :check do
 end
 
 desc "Deploy files for debug"
-task :debug => :concat do
+task :debug => :default do
   puts '------------------------'
   puts 'Deploy debug files'
   puts '------------------------'
