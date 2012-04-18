@@ -13,6 +13,7 @@ And some ruby gems. Setup next commands.
     gem install jasmine
     gem install jasmine:ci
     gem install selenium-webdriver
+    gem install jasmine-headless-webkit
 
 # Let's get started
 
