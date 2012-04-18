@@ -50,20 +50,15 @@ CLOBBER.include(OBJS)
 desc "Setup workspace and checkout modules"
 task :setup_workspace do
   puts '------------------------'
-  puts 'Setup workspace and checkout modules'
+  puts 'Setup workspace and checkout modules to ./build/node_modules'
   puts '------------------------'
 
-  sh "git submodule init"
-  sh "git submodule update"
-
   # Fix module version
-  Dir.chdir(File.join(BASE_DIR, 'build/node_modules/uglify-js')) do
-    sh "git checkout 37aed3a2964cabd4c9bf4f0750cf15242ec00731"
-  end
   Dir.chdir(File.join(BASE_DIR, 'build')) do
     sh "npm install optimist@0.3.1"
     sh "npm install mu2@0.5.13"
     sh "npm install clean-css@0.3.2"
+    sh "npm install uglify-js" #@1.2.7
   end
 end
 
