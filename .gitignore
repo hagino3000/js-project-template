@@ -13,3 +13,6 @@ _ReSharper*/
 build/node_modules/*
 dist/*
 
+webpack-assets.json
+
+node_modules

@@ -1,0 +1,26 @@
+{
+  "name": "mytemplate",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "lint": "eslint src/js; exit 0",
+    "start": "autoreload-server ./dist -p 8082",
+    "watch": "nodemon --watch src -x 'npm run build'",
+    "build": "webpack --config webpack.config.js -p"
+  },
+  "devDependencies": {
+    "assets-webpack-plugin": "^3.5.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "eslint": "^3.7.1",
+    "html-loader": "^0.4.4",
+    "nodemon": "^1.11.0",
+    "simple-autoreload-server": "^0.2.6",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-rev-replace-plugin": "^0.1.1"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
