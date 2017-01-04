@@ -18,7 +18,7 @@ Using
 
 Requirements
 
-- Nodejs
+- Nodejs > 6.0
 
 ```
 make setup
