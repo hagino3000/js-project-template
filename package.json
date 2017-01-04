@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint src/js; exit 0",
     "start": "autoreload-server ./dist -p 8082",
-    "watch": "nodemon --watch src -x 'npm run build'",
+    "watch": "nodemon -e js,css,html --watch src -x 'npm run build'",
     "build": "webpack --config webpack.config.js -p"
   },
   "devDependencies": {
