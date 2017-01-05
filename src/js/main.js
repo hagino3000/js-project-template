@@ -1,6 +1,7 @@
 'use strict';
 
-module.exports.myfunc = function() {
-    console.info('AAAA');
-}
+var fuga = require('./fuga.js')
 
+var xxx = function() {
+    return fuga.doSomething();
+}
